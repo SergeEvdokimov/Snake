@@ -41,14 +41,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(1040, 318);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.Size = new System.Drawing.Size(30, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Score";
+            this.label1.Text = "Cчет";
             // 
             // lblGameOverfc
             // 
             this.lblGameOverfc.AutoSize = true;
-            this.lblGameOverfc.Location = new System.Drawing.Point(432, 209);
+            this.lblGameOverfc.Location = new System.Drawing.Point(1040, 134);
             this.lblGameOverfc.Name = "lblGameOverfc";
             this.lblGameOverfc.Size = new System.Drawing.Size(35, 13);
             this.lblGameOverfc.TabIndex = 1;
@@ -56,9 +56,10 @@
             // 
             // pbCanvas
             // 
-            this.pbCanvas.Location = new System.Drawing.Point(95, 51);
+            this.pbCanvas.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.pbCanvas.Location = new System.Drawing.Point(0, 1);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(764, 578);
+            this.pbCanvas.Size = new System.Drawing.Size(764, 590);
             this.pbCanvas.TabIndex = 2;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
@@ -73,6 +74,8 @@
             this.Controls.Add(this.pbCanvas);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

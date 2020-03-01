@@ -30,7 +30,7 @@ namespace Snake
             Score = 0;
             Points = 100;
             GameOver = false;
-            direction = Direction.Down;
+            direction = Direction.Right;
         }
     }
 }

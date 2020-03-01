@@ -11,8 +11,7 @@ using System.Windows.Forms;
 namespace Snake
 {
     public partial class Form1 : Form
-    {
-        Random random = new Random();
+    {  
         private List<Circle> Snake = new List<Circle>();
         private Circle food = new Circle();
         private int maxxPos;
@@ -26,9 +25,11 @@ namespace Snake
             gameTimer.Interval = 1000 / Settings.Speed;
             gameTimer.Tick += UpdateScreen;
             gameTimer.Start();
+            StartGame();
         }
         private void StartGame()
         {
+            Random random = new Random();
             int i = random.Next(0, maxxPos);
             int j = random.Next(0, maxyPos);
             lblGameOverfc.Visible = false;
@@ -43,17 +44,86 @@ namespace Snake
         }
         private void GenerateFood()
         {
-            Circle food = new Circle();
+            int maxxPos = pbCanvas.Size.Width / Settings.Width;
+            int maxyPos = pbCanvas.Size.Height / Settings.Height;
+            Random random = new Random();
+            food = new Circle();
             food.x = random.Next(0, maxxPos);
             food.y = random.Next(0, maxyPos);
         }
-        private void UpdateScreen(object sender , EventArgs e)
+        private void UpdateScreen(object sender, EventArgs e)
         {
-
+            if (Settings.GameOver)
+            {
+                if (Input.KeyPressed(Keys.Enter))
+                {
+                    StartGame();
+                }
+            }
+            else
+            {
+                if(Input.KeyPressed(Keys.Up) && Settings.direction !=  Direction.Down)
+                {
+                    Settings.direction = Direction.Up;
+                }
+                else if (Input.KeyPressed(Keys.Down) && Settings.direction != Direction.Up)
+                {
+                    Settings.direction = Direction.Down;
+                }
+                else if (Input.KeyPressed(Keys.Left) && Settings.direction != Direction.Right)
+                {
+                    Settings.direction = Direction.Left;
+                }
+                else if (Input.KeyPressed(Keys.Right) && Settings.direction != Direction.Left)
+                {
+                    Settings.direction = Direction.Right;
+                }
+                MovePlayer();
+            }
+            pbCanvas.Invalidate();
+        }
+        private void Form1_KeyUp(object sender, KeyEventArgs e )
+        {
+            Input.ChangeState(e.KeyCode, false);
+        }
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            Input.ChangeState(e.KeyCode, true);
         }
         private void pbCanvas_Paint(object sender, PaintEventArgs e)
         {
-
+            Graphics canvas = e.Graphics;
+            if(!Settings.GameOver)
+            {
+                Brush snakeColor;
+                for(int i =0; i < Snake.Count; i ++)
+                {
+                    if (i == 0)
+                    {
+                        snakeColor = Brushes.Aqua;
+                    }
+                    else
+                    {
+                        snakeColor = Brushes.Gold;
+                    }
+                    canvas.FillEllipse(snakeColor,
+                    new Rectangle(Snake[i].x * Settings.Width,
+                    Snake[i].y * Settings.Height,
+                    Settings.Width,
+                    Settings.Height));
+                    canvas.FillEllipse(Brushes.Blue,
+                    new Rectangle(food.x * Settings.Width,
+                    food.y * Settings.Height,
+                    Settings.Width,
+                    Settings.Height));
+                }
+            }
+            else
+            {
+                string gameOver = "Игра окончена \nТвой фнальный счет:" + Settings.Score + "\nНажми Enter чтобы попробовать снова";
+                lblGameOverfc.Text = gameOver;
+                lblGameOverfc.Visible = true;
+            }
         }
         private void MovePlayer()
         {
@@ -94,8 +164,8 @@ namespace Snake
                 }
                 else
                 {
-                    Snake[i].x = Snake[i + 1].x;
-                    Snake[i].y = Snake[i + 1].y;
+                    Snake[i].x = Snake[i - 1].x;
+                    Snake[i].y = Snake[i - 1].y;
                 }
             }
         }
@@ -110,7 +180,7 @@ namespace Snake
             food.y = Snake[Snake.Count - 1].y;
             Snake.Add(food);
             Settings.Score += Settings.Points;
-            label1.Text = "Score: " + Settings.Score.ToString();
+            label1.Text = "Счет: " + Settings.Score.ToString();
             GenerateFood();
         }
     }
